@@ -1,0 +1,25 @@
+int: I = 12;
+int: J = 5;
+set of int: empleados = 1..I;
+set of int: tareas = 1..J;
+array[1..I] of float: E = [6, 6, 5, 4, 5, 6, 7, 6, 7, 3, 2, 7];
+array[1..J] of float: S = [5, 1, 3, 3, 3];
+array[1..J] of float: T = [490, 260, 240, 100, 200];
+array[1..I] of float: H = [710, 650, 700, 720, 660, 720, 680, 740, 690, 620, 620, 620];
+array[empleados,tareas] of float: C = [|6262, 6837, 6625, 6272, 5797|5787, 6792, 5906, 6169, 5982|4212, 5735, 4121, 5861, 6349|5682, 6164, 6760, 7531, 6450|6437, 4828, 6678, 6853, 6441|4108, 5149, 6662, 6369, 7374|4409, 5013, 4704, 6381, 5288|5416, 7218, 4623, 7727, 5882|5056, 5516, 4882, 5632, 6134|6117, 6771, 5615, 6658, 5820|5927, 5796, 7239, 7314, 4643|5110, 5824, 7317, 6317, 7412|];
+array[1..I] of float: U = [33.796449954039346, 32.78761449119113, 28.467276885287948, 24.566295613775026, 25.123064114441807, 34.186891606778424, 36.916026209599174, 31.493855141456933, 35.031485451392214, 17.187787126363318, 13.689686409285104, 36.87880224915599];
+array[tareas] of float: O = [21525, 23438, 10514, 11496, 24512];
+int: P = 91236;
+int: N=4;
+array[empleados,tareas] of var 0..1: x;
+array[empleados,tareas] of var float: y;
+var float: funcob = sum ([ sum ([ C[i,j]*x[i,j] + U[i]*y[i,j] | j in 1..J]) | i in 1..I]);
+constraint forall(j in 1..J)(sum([ y[i,j] | i in 1..I]) >= T[j]);
+constraint forall(i in 1..I)(sum([y[i,j] | j in 1..J ]) <= H[i]);
+constraint forall(i in 1..I)(forall(j in 1..J) ( x[i,j]*E[i] - x[i,j]*S[j] >= 0));
+constraint forall(i in 1..I)(forall(j in 1..J)( y[i,j] <= T[j]*x[i,j] ));
+constraint forall(i in 1..I)( sum([ x[i,j] | j in 1..J]) <= N );
+constraint  sum ([ sum ([ C[i,j]*x[i,j] + U[i]*y[i,j] + bool2int(E[i]>S[j])*O[j]*x[i,j]| j in 1..J]) | i in 1..I]) <= P;
+constraint forall(j in 1..J)( sum([ x[i,j] | i in 1..I]) <= 2 * I / 3 );
+solve minimize funcob;
+output ["xij = \(x)\n", "yij = \(y)\n", "costos = \(funcob)"]
