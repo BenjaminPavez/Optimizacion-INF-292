@@ -13,4 +13,4 @@ Instrucciones de uso:
 
 1) IMPORTANTE: VERIFICAR LAS DEPENDENCIAS ANTES DE EJECUTAR NUEVAMENTE.
 
-2) El programa funciona correctamente y cumple los requisitos solicitados en la entrega.
+2) El proyecto funciona correctamente y cumple los requisitos solicitados en la entrega.
